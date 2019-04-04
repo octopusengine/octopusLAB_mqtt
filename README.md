@@ -1,16 +1,18 @@
 # octopusLAB_mqtt
 ## mqtt examples
 
-MQTT
+MQTT >  https://en.wikipedia.org/wiki/MQTT
 
-RPi broker
+RPi broker 
 
-MQTT.fx
+MQTT.fx > https://mqttfx.jensd.de/
 
-octopusLAB devices
+octopusLAB devices > octopus/mqtt
 
-examples
+node red > https://nodered.org/
 
-Big Clown devices
+examples > instagram / github
+
+Big Clown devices > https://www.bigclown.com/
 
 BigClown Play Ground - Devices | Functions (Node Red) | Dash board | Messages ...
