@@ -1,18 +1,25 @@
 # octopusLAB_mqtt
-## mqtt examples
+## mqtt basic introduction
 
 MQTT >  https://en.wikipedia.org/wiki/MQTT
 
-RPi broker 
+RPi broker > https://randomnerdtutorials.com/how-to-install-mosquitto-broker-on-raspberry-pi/
 
 MQTT.fx > https://mqttfx.jensd.de/
 
-octopusLAB devices > octopus/mqtt
-
 node red > https://nodered.org/
+
+## Big Clown devices 
+
+> https://www.bigclown.com/
+
+BigClown Play Ground - Devices | Functions (Node Red) | Dash board | Messages ...
+
+## octopusLAB devices > ESP32: ROBOTboard | IoTboard
+
+octopusLAB devices > octopus/mqtt > https://github.com/octopusengine/octopuslab/tree/master/esp32-micropython/_examples/mqtt-examples
 
 examples > instagram / github
 
-Big Clown devices > https://www.bigclown.com/
 
-BigClown Play Ground - Devices | Functions (Node Red) | Dash board | Messages ...
+
