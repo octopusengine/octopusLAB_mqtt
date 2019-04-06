@@ -9,6 +9,8 @@ MQTT.fx > https://mqttfx.jensd.de/
 
 node red > https://nodered.org/
 
+public brokers > https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
+
 ## Big Clown devices 
 
 > https://www.bigclown.com/
