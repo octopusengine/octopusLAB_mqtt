@@ -11,6 +11,8 @@ node red > https://nodered.org/
 
 public brokers > https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
 
+essentials > https://www.hivemq.com/blog/mqtt-essentials-part-8-retained-messages
+
 ## Big Clown devices 
 
 > https://www.bigclown.com/
