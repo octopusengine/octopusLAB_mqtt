@@ -1,6 +1,7 @@
 esp32 exaples:
 
-https://github.com/octopusengine/octopuslab/tree/master/esp32-micropython/_examples/mqtt-examples
+https://github.com/octopusengine/octopuslab/tree/master/esp32-micropython/examples/mqtt
+
 
 main universal ESP32 MQTT client
 for robotBoard and IOTboard octopusLAB modules:
