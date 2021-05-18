@@ -1,7 +1,4 @@
 # basic example: octopusLAB - ESP32 - PLC - MQTT
-
-print("mqtt-led.py > mqtt 'hello world' example")
-
 from time import sleep
 from machine import Timer
 from gc import mem_free
@@ -21,6 +18,8 @@ from components.plc.operands.op_or import PLC_operand_OR
 from components.lm75 import LM75B
 from components.led import Led
 from components.i2c_expander import Expander8
+
+print("mqtt-led.py > mqtt basic example")
 
 print("--- RAM free ---> " + str(mem_free())) 
 
@@ -82,42 +81,66 @@ def simple_blink():
 
 
 def mqtt_handler(topic, msg):
+    global byte8
     print("MQTT handler {0}: {1}".format(topic, msg))
     if "led" in topic:
         print("led:", end='')
         data = bytes.decode(msg)
 
-        if data[0] == 'N':  # oN
+        if data[0] == '1':  # oN
             print("-> on")
-            exp8.write_8bit(set_bit(byte8,OUT1,0)) # inverse
             led.value(1)
-        elif data[0] == 'F':  # ofF 
+        elif data[0] == '0':  # ofF 
             print("-> off")
-            exp8.write_8bit(set_bit(byte8,OUT1,1))
-            led.value(0) 
-
-        elif data[0] == 'D21':  # on 
-            print("D2 -> 1")
-            exp8.write_8bit(set_bit(byte8,OUT2,1))
-            led.value(1)
+            led.value(0)
             sleep(0.1)
 
-        elif data[0] == 'D20':  # off 
-            print("D2 -> 0")
-            exp8.write_8bit(set_bit(byte8,OUT2,0))
-            led.value(0)
+    if "do/1" in topic: # do = digital output
+        print("do:", end='')
+        data = bytes.decode(msg)
+
+        if data == '1':  # on 
+            print("D1 -> 1")
+            byte8 = set_bit(byte8,OUT1,0)
+            exp8.write_8bit(byte8)
+            sleep(0.1)
+
+        elif data == '0':  # off 
+            print("D1 -> 0")
+            byte8 = set_bit(byte8,OUT1,1)
+            exp8.write_8bit(byte8)
             sleep(0.1) 
 
-        elif data[0] == 'D31':  # on 
-            print("D3 -> 1")
-            exp8.write_8bit(set_bit(byte8,OUT3,1))
-            led.value(1)
+    if "do/2" in topic: # do = digital output
+        print("do:", end='')
+        data = bytes.decode(msg)
+
+        if data == '1':  # on 
+            print("D2 -> 1")
+            byte8 = set_bit(byte8,OUT2,0)
+            exp8.write_8bit(byte8)
             sleep(0.1)
 
-        elif data[0] == 'D30':  # off 
+        elif data == '0':  # off 
+            print("D2 -> 0")
+            byte8 = set_bit(byte8,OUT2,1)
+            exp8.write_8bit(byte8)
+            sleep(0.1) 
+
+    if "do/3" in topic: # do = digital output
+        print("do:", end='')
+        data = bytes.decode(msg)
+
+        if data == '1':  # on 
+            print("D3 -> 1")
+            byte8 = set_bit(byte8,OUT3,0)
+            exp8.write_8bit(byte8)
+            sleep(0.1)
+
+        elif data == '0':  # off 
             print("D3 -> 0")
-            exp8.write_8bit(set_bit(byte8,OUT3,0))
-            led.value(0)
+            byte8 = set_bit(byte8,OUT3,1)
+            exp8.write_8bit(byte8)
             sleep(0.1) 
 
 
