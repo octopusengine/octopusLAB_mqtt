@@ -57,27 +57,18 @@ lm = LM75B(i2c)
 temp = lm.get_temp()
 print("- Temp: ", temp)
 
-exp8 = Expander8(34)
+exp8 = Expander8(34,i2c)
 print("- PCF:", exp8.read())
 
 # bits4 = "0101"
 # exp8.write_8bit(bits4)
 
-for i in range(3):
-    exp8.write_8bit(0)
-    sleep(0.1)
-    exp8.write_8bit(255)
-    sleep(0.1)
-    
-exp8.write_8bit(set_bit(255,OUT1,0))
+plc_set(OUT1,0)
 sleep(0.2)
-exp8.write_8bit(set_bit(255,OUT2,0))
+plc_set(OUT2,0)
 sleep(0.2)
-exp8.write_8bit(set_bit(255,OUT3,0))
-sleep(0.2)
-exp8.write_8bit(set_bit(255,OUT4,0))
-
-sleep(0.3)
+plc_set(OUT3,0)
+sleep(0.5)
 exp8.write_8bit(255)
 
 
@@ -105,21 +96,27 @@ def mqtt_handler(topic, msg):
             sleep(0.1)
 
     if "do/1" in topic: # do = digital output
-        if data == '1':  # on 
-            #print("D1 -> 1")
-            #byte8 = set_bit(byte8,OUT1,0)
-            #exp8.write_8bit(byte8)
-            plc_set(OUT1,0)
-        elif data == '0':  # off 
-            plc_set(OUT1,1)
+        if data == '1': plc_set(OUT1,0) # on
+        elif data == '0': plc_set(OUT1,1) # off
+            
 
-    if "do/2" in topic:   
+    if "do/2" in topic:
         if data == '1': plc_set(OUT2,0)
         elif data == '0': plc_set(OUT2,1)
 
     if "do/3" in topic:
         if data == '1': plc_set(OUT3,0)
         elif data == '0': plc_set(OUT3,1)
+
+
+def mqtt_send_temp():
+    try:
+       temp = lm.get_temp()
+       print("- Temp: ", temp)
+       c.publish("octopus/device/{0}/temp".format(m.client_id),str(temp)) # topic, message (value) to publish
+       
+    except:
+       print("mqtt_send_temp() Err.")
 
 
 print("--- wifi_connect >")
@@ -143,6 +140,14 @@ c.publish("octopus/device", m.client_id) # topic, message (value) to publish
 
 print("--- RAM free ---> " + str(mem_free()))
 print("--- main loop >")
+loop_count = 0
 while True:
     c.check_msg()
-    # sleep(5)
+  
+    sleep(0.1)
+    loop_count +=1
+    print(".",end="")
+    if loop_count == 100:
+        mqtt_send_temp()
+        loop_count = 0
+        print()
