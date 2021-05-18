@@ -34,11 +34,19 @@ timer_counter = 0
 periodic = False
 # tim1 = Timer(0)
 
+print("--- PLC shield ---")
+print("-"*50)
+
 byte8 = 255 # all leds off
 
 
-print("--- PLC shield ---")
-print("-"*50)
+def plc_set(output,value):
+     global byte8
+     print(output,"->", value)
+     byte8 = set_bit(byte8,output,value)
+     exp8.write_8bit(byte8)
+     sleep(0.1)
+
 
 print("- I2C:")
 i2c = i2c_init(True,200)
@@ -83,9 +91,10 @@ def simple_blink():
 def mqtt_handler(topic, msg):
     global byte8
     print("MQTT handler {0}: {1}".format(topic, msg))
+    data = bytes.decode(msg)
+
     if "led" in topic:
-        print("led:", end='')
-        data = bytes.decode(msg)
+        print("led:", end='')        
 
         if data[0] == '1':  # oN
             print("-> on")
@@ -96,52 +105,21 @@ def mqtt_handler(topic, msg):
             sleep(0.1)
 
     if "do/1" in topic: # do = digital output
-        print("do:", end='')
-        data = bytes.decode(msg)
-
         if data == '1':  # on 
-            print("D1 -> 1")
-            byte8 = set_bit(byte8,OUT1,0)
-            exp8.write_8bit(byte8)
-            sleep(0.1)
-
+            #print("D1 -> 1")
+            #byte8 = set_bit(byte8,OUT1,0)
+            #exp8.write_8bit(byte8)
+            plc_set(OUT1,0)
         elif data == '0':  # off 
-            print("D1 -> 0")
-            byte8 = set_bit(byte8,OUT1,1)
-            exp8.write_8bit(byte8)
-            sleep(0.1) 
+            plc_set(OUT1,1)
 
-    if "do/2" in topic: # do = digital output
-        print("do:", end='')
-        data = bytes.decode(msg)
+    if "do/2" in topic:   
+        if data == '1': plc_set(OUT2,0)
+        elif data == '0': plc_set(OUT2,1)
 
-        if data == '1':  # on 
-            print("D2 -> 1")
-            byte8 = set_bit(byte8,OUT2,0)
-            exp8.write_8bit(byte8)
-            sleep(0.1)
-
-        elif data == '0':  # off 
-            print("D2 -> 0")
-            byte8 = set_bit(byte8,OUT2,1)
-            exp8.write_8bit(byte8)
-            sleep(0.1) 
-
-    if "do/3" in topic: # do = digital output
-        print("do:", end='')
-        data = bytes.decode(msg)
-
-        if data == '1':  # on 
-            print("D3 -> 1")
-            byte8 = set_bit(byte8,OUT3,0)
-            exp8.write_8bit(byte8)
-            sleep(0.1)
-
-        elif data == '0':  # off 
-            print("D3 -> 0")
-            byte8 = set_bit(byte8,OUT3,1)
-            exp8.write_8bit(byte8)
-            sleep(0.1) 
+    if "do/3" in topic:
+        if data == '1': plc_set(OUT3,0)
+        elif data == '0': plc_set(OUT3,1)
 
 
 print("--- wifi_connect >")
